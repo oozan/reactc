@@ -17,6 +17,11 @@
   margin: 0 0 16px;
 }
 
+.valueInput {
+  border: none;
+  outline: none;
+}
+
 .postBody {
   margin: 0 0 16px;
 }
