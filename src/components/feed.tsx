@@ -19,8 +19,9 @@ export default function Feed(props: IFeedProps) {
   return <div>{posts.reverse()}</div>;
 }
 
-export const Post: React.FC<{
+interface IPost {
   index: number;
+  comment: boolean;
   post: {
     title: string;
     body: string;
@@ -28,37 +29,47 @@ export const Post: React.FC<{
     isLiked: boolean;
   };
   onLike: (index: number) => void;
-}> = ({ index, post, onLike }) => {
+}
+
+export const Post: React.FC<IPost> = (props) => {
+  const valueRef = React.useRef<HTMLInputElement>(null);
+
+  const focusInput = () => {
+    valueRef.current?.focus()
+  }
+
   return (
     <div className={styles.post}>
-      <p className={styles.postTitle}>{post.title}</p>
+      <p className={styles.postTitle}>{props.post.title}</p>
 
-      <p className={styles.postBody}>{post.body}</p>
+      <p className={styles.postBody}>{props.post.body}</p>
+      <input ref={valueRef} className={styles.valueInput} />
 
       <div className={styles.stats}>
-        {!!post.likesCount && (
+        {!!props.post.likesCount && (
           <div className={styles.statsItem}>
-            <FaThumbsUp /> <span>{post.likesCount}</span>
+            <FaThumbsUp /> <span>{props.post.likesCount}</span>
           </div>
         )}
       </div>
 
       <div className={styles.actionBar}>
         <div
-          className={`${styles.actionBarItem} ${
-            post.isLiked ? "active" : ""
-          }`}
+          className={`${styles.actionBarItem} ${props.post.isLiked ? "active" : ""
+            }`}
           role="button"
           onClick={() => {
-              onLike(index);
+            props.onLike(props.index);
           }}
         >
           <FaThumbsUp /> <span className={styles.actionBarItemLabel}>Like</span>
         </div>
 
-        <div className={styles.actionBarItem} role="button">
+        <div className={styles.actionBarItem} role="button" onClick={focusInput}>
           <FaComment />{" "}
-          <span className={styles.actionBarItemLabel}>Comment</span>
+          <span className={styles.actionBarItemLabel}>
+            Post a Comment
+          </span>
         </div>
       </div>
     </div>
